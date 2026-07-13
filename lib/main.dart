@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_list/core/handler/dio_handler.dart';
+import 'package:product_list/core/handler/injectable.dart' hide getIt;
 import 'package:product_list/features/product_catalog/bloc/product_bloc.dart';
 import 'package:product_list/features/product_catalog/pages/product_catalog_page.dart';
 import 'package:product_list/repository/product_repository.dart';
 
 void main() {
-  DioHandler.setup();
+
+  configureDependencies();
   runApp(const MyApp());
 }
 
@@ -36,7 +38,10 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const ProductCatalogPage() 
+      home: BlocProvider(create: (context) => ProductBloc(getIt<ProductRepository>()), child:  
+      const ProductCatalogPage() 
+      ,)
+      
     );
   }
 }

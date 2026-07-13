@@ -5,21 +5,23 @@ part 'product_dto.g.dart';
 
 @JsonSerializable()
 class ProductDto {
-  final String id;
-  final String name;
+  
+  final int id;
+  final String title;
   final String description;
   final double price;
-  final String imageUrl;
+  @JsonKey(name: "thumbnail")
+  final String thumbnailUrl;
   final String category;
   final double rating;
   final List<String> tags;
 
   const ProductDto({
     required this.id,
-    required this.name,
+    required this.title,
     required this.description,
     required this.price,
-    required this.imageUrl,
+    required this.thumbnailUrl,
     required this.category,
     this.rating = 0.0,
     required this.tags,
@@ -31,11 +33,12 @@ class ProductDto {
   Map<String, dynamic> toJson() => _$ProductDtoToJson(this);
 
   Product toDomain() => Product(
-    id: id,
-    name: name,
+    id: id.toString(),
+    title: title,
     description: description,
     price: price,
-    imageUrl: imageUrl,
+    rating: rating,
+    imageUrl: thumbnailUrl,
     category: category,
     tags: tags,
   );

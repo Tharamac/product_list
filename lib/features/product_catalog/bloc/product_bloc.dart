@@ -15,7 +15,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final ProductRepository repository;
   ProductBloc(this.repository) : super(ProductState.initial()) {
     on<ProductEvent>((event, emit) async {
-      event.map(
+     await event.map(
         fetchProductData: (e) async {
           emit(
             state.copyWith(
@@ -33,6 +33,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
                 failOrFetchSuccess: some(left(failure)),
               ),
               (productsAndPaging) => state.copyWith(
+                loadingProductList: false,
                 failOrFetchSuccess: some(right(unit)),
                 productList: productsAndPaging.productList,
                 productListpaging: productsAndPaging.paging
@@ -44,10 +45,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
         getProductDetailById: (e) {}, 
         fetchMoreProductData: (e) async {  
-              
           emit(
             state.copyWith(
-
               loadingProductList: true,
             ),
           );

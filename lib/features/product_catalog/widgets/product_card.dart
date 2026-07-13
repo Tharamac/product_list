@@ -36,13 +36,15 @@ class ProductCard extends StatelessWidget {
               
               ),
             ),
-            Padding(
+            Container(
+              color: Theme.of(context).cardColor,
               padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: .stretch,
+
                 children: [
                   Text(
-                    product.name,
+                    product.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontWeight: FontWeight.w600),

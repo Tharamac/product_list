@@ -5,6 +5,7 @@ part 'product_response_dto.g.dart';
 
 @JsonSerializable()
 class ProductResponseDto {
+  @JsonKey(name: "products")
   final List<dynamic> productList;
   final int total;
   final int skip;

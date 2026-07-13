@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:product_list/features/product_catalog/bloc/product_bloc.dart';
 import 'package:product_list/features/product_catalog/domain/product.dart';
 import 'package:product_list/features/product_catalog/pages/product_detail_page.dart';
 import 'package:product_list/features/product_catalog/widgets/product_card.dart';
-
+import 'package:skeletonizer/skeletonizer.dart';
 
 /// Decides column count from available width.
 int _gridColumns(double width) {
@@ -18,6 +20,7 @@ double _gridAspectRatio(double width) {
   if (width >= 600) return 0.7;
   return 0.68;
 }
+
 class ProductCatalogPage extends StatefulWidget {
   const ProductCatalogPage({super.key});
 
@@ -26,21 +29,21 @@ class ProductCatalogPage extends StatefulWidget {
 }
 
 class _ProductCatalogPageState extends State<ProductCatalogPage> {
+@override
+  void initState() {
+  context.read<ProductBloc>().add(ProductEvent.fetchProductData());
+      super.initState();
+    }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
+      appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-    
-        title: Text(
-        "Product Catalog"),
 
-        actions: [
-          IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-        ],
+        title: Text("Product Catalog"),
+
+        actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -50,33 +53,48 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
 
           // Optional: constrain content on very wide screens (desktop/web)
           final maxContentWidth = 1400.0;
-          final horizontalPadding =
-              width > maxContentWidth ? (width - maxContentWidth) / 2 : 12.0;
+          final horizontalPadding = width > maxContentWidth
+              ? (width - maxContentWidth) / 2
+              : 12.0;
 
-          return GridView.builder(
-            padding: EdgeInsets.symmetric(
-              horizontal: horizontalPadding,
-              vertical: 12,
-            ),
-            itemCount: dummyProducts.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columns,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: aspectRatio,
-            ),
-            itemBuilder: (context, index) {
-              final product = dummyProducts[index];
-              return ProductCard(
-                product: product,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ProductDetailPage(product: product),
-                    ),
-                  );
+          return BlocBuilder<ProductBloc, ProductState>(
+            builder: (context, state) {
+              
+              return RefreshIndicator.adaptive(
+                onRefresh: () async {
+                  context.read<ProductBloc>().add(ProductEvent.fetchProductData());
                 },
+                child: Skeletonizer(
+                  enabled: state.loadingProductList,
+                  // containersColor: Colors.blueGrey,
+                  child: GridView.builder(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: horizontalPadding,
+                      vertical: 12,
+                    ),
+                    itemCount: state.productList.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: columns,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: aspectRatio,
+                    ),
+                    itemBuilder: (context, index) {
+                      final product = state.productList[index];
+                      return ProductCard(
+                        product: product,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ProductDetailPage(product: product),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
               );
             },
           );
@@ -85,5 +103,3 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
     );
   }
 }
-
-

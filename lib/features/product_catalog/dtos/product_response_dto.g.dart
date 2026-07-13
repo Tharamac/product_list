@@ -8,7 +8,7 @@ part of 'product_response_dto.dart';
 
 ProductResponseDto _$ProductResponseDtoFromJson(Map<String, dynamic> json) =>
     ProductResponseDto(
-      productList: json['productList'] as List<dynamic>,
+      productList: json['products'] as List<dynamic>,
       total: (json['total'] as num).toInt(),
       skip: (json['skip'] as num).toInt(),
       limit: (json['limit'] as num).toInt(),
@@ -16,7 +16,7 @@ ProductResponseDto _$ProductResponseDtoFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ProductResponseDtoToJson(ProductResponseDto instance) =>
     <String, dynamic>{
-      'productList': instance.productList,
+      'products': instance.productList,
       'total': instance.total,
       'skip': instance.skip,
       'limit': instance.limit,

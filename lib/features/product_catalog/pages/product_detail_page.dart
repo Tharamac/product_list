@@ -36,7 +36,7 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    product.name,
+                    product.title,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -85,7 +85,7 @@ class ProductDetailPage extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('${product.name} added to cart')),
+                  SnackBar(content: Text('${product.title} added to cart')),
                 );
               },
               icon: const Icon(Icons.shopping_cart_outlined),

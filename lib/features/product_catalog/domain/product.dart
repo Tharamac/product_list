@@ -5,7 +5,7 @@ import 'package:product_list/features/product_catalog/dtos/product_dto.dart';
 
 class Product {
   final String id;
-  final String name;
+  final String title;
   final String description;
   final double price;
   final String imageUrl;
@@ -15,7 +15,7 @@ class Product {
 
   const Product({
     required this.id,
-    required this.name,
+    required this.title,
     required this.description,
     required this.price,
     required this.imageUrl,
@@ -25,7 +25,7 @@ class Product {
   });
   
   factory Product.fromDTO(ProductDto dto) {
-    return Product(id: dto.id, name: dto.name, description: dto.description, price: dto.price, imageUrl: dto.imageUrl, category: dto.category, tags: dto.tags);
+    return Product(id: dto.id.toString(), title: dto.title, description: dto.description, price: dto.price, imageUrl: dto.thumbnailUrl, category: dto.category, tags: dto.tags);
   }
 }  
 
@@ -37,7 +37,7 @@ final List<Product> dummyProducts = List.generate(
   10,
   (i) => Product(
     id: 'p$i',
-    name: 'Product ${i + 1}',
+    title: 'Product ${i + 1}',
     description:
         'This is a short description for product ${i + 1}. It highlights the key features and benefits.',
     price: 19.99 + (i * 5),
