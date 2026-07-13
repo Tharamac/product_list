@@ -8,7 +8,7 @@ import 'package:product_list/features/product_catalog/dtos/product_dto.dart';
 import 'package:product_list/features/product_catalog/dtos/product_response_dto.dart';
 
 abstract class IProductRepository {
-  Future<Either<ProductFailure, (List<Product> product, PaginationData paging)>> getProductData({int skip = 0, int limit = 20});
+  Future<Either<ProductFailure, ({List<Product> productList, PaginationData paging})>> getProductData({int skip = 0, int limit = 20});
   Future<Either<ProductFailure, Product>> getProductDetailById(String id);
 }
 
@@ -19,7 +19,7 @@ class ProductRepository implements IProductRepository {
   });
   
   @override
-  Future<Either<ProductFailure, (List<Product>, PaginationData)>> getProductData({int skip = 0, int limit = 20}) async{
+  Future<Either<ProductFailure, ({List<Product> productList, PaginationData paging})>> getProductData({int skip = 0, int limit = 20}) async{
     try{
       final result = await api.getProduct(
         skip: skip,
@@ -30,7 +30,7 @@ class ProductRepository implements IProductRepository {
       final PaginationData paging = response.paging;
 
       return right((
-        productList, paging
+        productList : productList, paging: paging
       ));
     } on DioException catch (e) {
 
