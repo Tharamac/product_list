@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProductState {
 
- bool get loadingProductList; Option<Either<ProductFailure, Unit>> get failOrFetchSuccess; List<Product> get productList;
+ bool get loadingProductList; Option<Either<ProductFailure, Unit>> get failOrFetchSuccess; List<Product> get productList; PaginationData get productListpaging; List<Product> get searchProductResult; PaginationData get productSearchpaging;
 /// Create a copy of ProductState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ProductStateCopyWith<ProductState> get copyWith => _$ProductStateCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductState&&(identical(other.loadingProductList, loadingProductList) || other.loadingProductList == loadingProductList)&&(identical(other.failOrFetchSuccess, failOrFetchSuccess) || other.failOrFetchSuccess == failOrFetchSuccess)&&const DeepCollectionEquality().equals(other.productList, productList));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductState&&(identical(other.loadingProductList, loadingProductList) || other.loadingProductList == loadingProductList)&&(identical(other.failOrFetchSuccess, failOrFetchSuccess) || other.failOrFetchSuccess == failOrFetchSuccess)&&const DeepCollectionEquality().equals(other.productList, productList)&&(identical(other.productListpaging, productListpaging) || other.productListpaging == productListpaging)&&const DeepCollectionEquality().equals(other.searchProductResult, searchProductResult)&&(identical(other.productSearchpaging, productSearchpaging) || other.productSearchpaging == productSearchpaging));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadingProductList,failOrFetchSuccess,const DeepCollectionEquality().hash(productList));
+int get hashCode => Object.hash(runtimeType,loadingProductList,failOrFetchSuccess,const DeepCollectionEquality().hash(productList),productListpaging,const DeepCollectionEquality().hash(searchProductResult),productSearchpaging);
 
 @override
 String toString() {
-  return 'ProductState(loadingProductList: $loadingProductList, failOrFetchSuccess: $failOrFetchSuccess, productList: $productList)';
+  return 'ProductState(loadingProductList: $loadingProductList, failOrFetchSuccess: $failOrFetchSuccess, productList: $productList, productListpaging: $productListpaging, searchProductResult: $searchProductResult, productSearchpaging: $productSearchpaging)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ProductStateCopyWith<$Res>  {
   factory $ProductStateCopyWith(ProductState value, $Res Function(ProductState) _then) = _$ProductStateCopyWithImpl;
 @useResult
 $Res call({
- bool loadingProductList, Option<Either<ProductFailure, Unit>> failOrFetchSuccess, List<Product> productList
+ bool loadingProductList, Option<Either<ProductFailure, Unit>> failOrFetchSuccess, List<Product> productList, PaginationData productListpaging, List<Product> searchProductResult, PaginationData productSearchpaging
 });
 
 
@@ -62,12 +62,15 @@ class _$ProductStateCopyWithImpl<$Res>
 
 /// Create a copy of ProductState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loadingProductList = null,Object? failOrFetchSuccess = null,Object? productList = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? loadingProductList = null,Object? failOrFetchSuccess = null,Object? productList = null,Object? productListpaging = null,Object? searchProductResult = null,Object? productSearchpaging = null,}) {
   return _then(_self.copyWith(
 loadingProductList: null == loadingProductList ? _self.loadingProductList : loadingProductList // ignore: cast_nullable_to_non_nullable
 as bool,failOrFetchSuccess: null == failOrFetchSuccess ? _self.failOrFetchSuccess : failOrFetchSuccess // ignore: cast_nullable_to_non_nullable
 as Option<Either<ProductFailure, Unit>>,productList: null == productList ? _self.productList : productList // ignore: cast_nullable_to_non_nullable
-as List<Product>,
+as List<Product>,productListpaging: null == productListpaging ? _self.productListpaging : productListpaging // ignore: cast_nullable_to_non_nullable
+as PaginationData,searchProductResult: null == searchProductResult ? _self.searchProductResult : searchProductResult // ignore: cast_nullable_to_non_nullable
+as List<Product>,productSearchpaging: null == productSearchpaging ? _self.productSearchpaging : productSearchpaging // ignore: cast_nullable_to_non_nullable
+as PaginationData,
   ));
 }
 
@@ -152,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool loadingProductList,  Option<Either<ProductFailure, Unit>> failOrFetchSuccess,  List<Product> productList)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool loadingProductList,  Option<Either<ProductFailure, Unit>> failOrFetchSuccess,  List<Product> productList,  PaginationData productListpaging,  List<Product> searchProductResult,  PaginationData productSearchpaging)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProductState() when $default != null:
-return $default(_that.loadingProductList,_that.failOrFetchSuccess,_that.productList);case _:
+return $default(_that.loadingProductList,_that.failOrFetchSuccess,_that.productList,_that.productListpaging,_that.searchProductResult,_that.productSearchpaging);case _:
   return orElse();
 
 }
@@ -173,10 +176,10 @@ return $default(_that.loadingProductList,_that.failOrFetchSuccess,_that.productL
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool loadingProductList,  Option<Either<ProductFailure, Unit>> failOrFetchSuccess,  List<Product> productList)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool loadingProductList,  Option<Either<ProductFailure, Unit>> failOrFetchSuccess,  List<Product> productList,  PaginationData productListpaging,  List<Product> searchProductResult,  PaginationData productSearchpaging)  $default,) {final _that = this;
 switch (_that) {
 case _ProductState():
-return $default(_that.loadingProductList,_that.failOrFetchSuccess,_that.productList);case _:
+return $default(_that.loadingProductList,_that.failOrFetchSuccess,_that.productList,_that.productListpaging,_that.searchProductResult,_that.productSearchpaging);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +196,10 @@ return $default(_that.loadingProductList,_that.failOrFetchSuccess,_that.productL
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool loadingProductList,  Option<Either<ProductFailure, Unit>> failOrFetchSuccess,  List<Product> productList)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool loadingProductList,  Option<Either<ProductFailure, Unit>> failOrFetchSuccess,  List<Product> productList,  PaginationData productListpaging,  List<Product> searchProductResult,  PaginationData productSearchpaging)?  $default,) {final _that = this;
 switch (_that) {
 case _ProductState() when $default != null:
-return $default(_that.loadingProductList,_that.failOrFetchSuccess,_that.productList);case _:
+return $default(_that.loadingProductList,_that.failOrFetchSuccess,_that.productList,_that.productListpaging,_that.searchProductResult,_that.productSearchpaging);case _:
   return null;
 
 }
@@ -208,7 +211,7 @@ return $default(_that.loadingProductList,_that.failOrFetchSuccess,_that.productL
 
 
 class _ProductState implements ProductState {
-  const _ProductState({required this.loadingProductList, required this.failOrFetchSuccess, required final  List<Product> productList}): _productList = productList;
+  const _ProductState({required this.loadingProductList, required this.failOrFetchSuccess, required final  List<Product> productList, required this.productListpaging, required final  List<Product> searchProductResult, required this.productSearchpaging}): _productList = productList,_searchProductResult = searchProductResult;
   
 
 @override final  bool loadingProductList;
@@ -220,6 +223,15 @@ class _ProductState implements ProductState {
   return EqualUnmodifiableListView(_productList);
 }
 
+@override final  PaginationData productListpaging;
+ final  List<Product> _searchProductResult;
+@override List<Product> get searchProductResult {
+  if (_searchProductResult is EqualUnmodifiableListView) return _searchProductResult;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_searchProductResult);
+}
+
+@override final  PaginationData productSearchpaging;
 
 /// Create a copy of ProductState
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +243,16 @@ _$ProductStateCopyWith<_ProductState> get copyWith => __$ProductStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductState&&(identical(other.loadingProductList, loadingProductList) || other.loadingProductList == loadingProductList)&&(identical(other.failOrFetchSuccess, failOrFetchSuccess) || other.failOrFetchSuccess == failOrFetchSuccess)&&const DeepCollectionEquality().equals(other._productList, _productList));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductState&&(identical(other.loadingProductList, loadingProductList) || other.loadingProductList == loadingProductList)&&(identical(other.failOrFetchSuccess, failOrFetchSuccess) || other.failOrFetchSuccess == failOrFetchSuccess)&&const DeepCollectionEquality().equals(other._productList, _productList)&&(identical(other.productListpaging, productListpaging) || other.productListpaging == productListpaging)&&const DeepCollectionEquality().equals(other._searchProductResult, _searchProductResult)&&(identical(other.productSearchpaging, productSearchpaging) || other.productSearchpaging == productSearchpaging));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadingProductList,failOrFetchSuccess,const DeepCollectionEquality().hash(_productList));
+int get hashCode => Object.hash(runtimeType,loadingProductList,failOrFetchSuccess,const DeepCollectionEquality().hash(_productList),productListpaging,const DeepCollectionEquality().hash(_searchProductResult),productSearchpaging);
 
 @override
 String toString() {
-  return 'ProductState(loadingProductList: $loadingProductList, failOrFetchSuccess: $failOrFetchSuccess, productList: $productList)';
+  return 'ProductState(loadingProductList: $loadingProductList, failOrFetchSuccess: $failOrFetchSuccess, productList: $productList, productListpaging: $productListpaging, searchProductResult: $searchProductResult, productSearchpaging: $productSearchpaging)';
 }
 
 
@@ -251,7 +263,7 @@ abstract mixin class _$ProductStateCopyWith<$Res> implements $ProductStateCopyWi
   factory _$ProductStateCopyWith(_ProductState value, $Res Function(_ProductState) _then) = __$ProductStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool loadingProductList, Option<Either<ProductFailure, Unit>> failOrFetchSuccess, List<Product> productList
+ bool loadingProductList, Option<Either<ProductFailure, Unit>> failOrFetchSuccess, List<Product> productList, PaginationData productListpaging, List<Product> searchProductResult, PaginationData productSearchpaging
 });
 
 
@@ -268,12 +280,15 @@ class __$ProductStateCopyWithImpl<$Res>
 
 /// Create a copy of ProductState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? loadingProductList = null,Object? failOrFetchSuccess = null,Object? productList = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? loadingProductList = null,Object? failOrFetchSuccess = null,Object? productList = null,Object? productListpaging = null,Object? searchProductResult = null,Object? productSearchpaging = null,}) {
   return _then(_ProductState(
 loadingProductList: null == loadingProductList ? _self.loadingProductList : loadingProductList // ignore: cast_nullable_to_non_nullable
 as bool,failOrFetchSuccess: null == failOrFetchSuccess ? _self.failOrFetchSuccess : failOrFetchSuccess // ignore: cast_nullable_to_non_nullable
 as Option<Either<ProductFailure, Unit>>,productList: null == productList ? _self._productList : productList // ignore: cast_nullable_to_non_nullable
-as List<Product>,
+as List<Product>,productListpaging: null == productListpaging ? _self.productListpaging : productListpaging // ignore: cast_nullable_to_non_nullable
+as PaginationData,searchProductResult: null == searchProductResult ? _self._searchProductResult : searchProductResult // ignore: cast_nullable_to_non_nullable
+as List<Product>,productSearchpaging: null == productSearchpaging ? _self.productSearchpaging : productSearchpaging // ignore: cast_nullable_to_non_nullable
+as PaginationData,
   ));
 }
 
@@ -324,11 +339,12 @@ extension ProductEventPatterns on ProductEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _FetchProductData value)?  fetchProductData,TResult Function( _GetProductDetailById value)?  getProductDetailById,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _FetchProductData value)?  fetchProductData,TResult Function( _FetchMoreProductData value)?  fetchMoreProductData,TResult Function( _GetProductDetailById value)?  getProductDetailById,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _FetchProductData() when fetchProductData != null:
-return fetchProductData(_that);case _GetProductDetailById() when getProductDetailById != null:
+return fetchProductData(_that);case _FetchMoreProductData() when fetchMoreProductData != null:
+return fetchMoreProductData(_that);case _GetProductDetailById() when getProductDetailById != null:
 return getProductDetailById(_that);case _:
   return orElse();
 
@@ -347,11 +363,12 @@ return getProductDetailById(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _FetchProductData value)  fetchProductData,required TResult Function( _GetProductDetailById value)  getProductDetailById,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _FetchProductData value)  fetchProductData,required TResult Function( _FetchMoreProductData value)  fetchMoreProductData,required TResult Function( _GetProductDetailById value)  getProductDetailById,}){
 final _that = this;
 switch (_that) {
 case _FetchProductData():
-return fetchProductData(_that);case _GetProductDetailById():
+return fetchProductData(_that);case _FetchMoreProductData():
+return fetchMoreProductData(_that);case _GetProductDetailById():
 return getProductDetailById(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -369,11 +386,12 @@ return getProductDetailById(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _FetchProductData value)?  fetchProductData,TResult? Function( _GetProductDetailById value)?  getProductDetailById,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _FetchProductData value)?  fetchProductData,TResult? Function( _FetchMoreProductData value)?  fetchMoreProductData,TResult? Function( _GetProductDetailById value)?  getProductDetailById,}){
 final _that = this;
 switch (_that) {
 case _FetchProductData() when fetchProductData != null:
-return fetchProductData(_that);case _GetProductDetailById() when getProductDetailById != null:
+return fetchProductData(_that);case _FetchMoreProductData() when fetchMoreProductData != null:
+return fetchMoreProductData(_that);case _GetProductDetailById() when getProductDetailById != null:
 return getProductDetailById(_that);case _:
   return null;
 
@@ -391,10 +409,11 @@ return getProductDetailById(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String keyword,  int limit,  int page)?  fetchProductData,TResult Function( String id)?  getProductDetailById,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetchProductData,TResult Function()?  fetchMoreProductData,TResult Function( String id)?  getProductDetailById,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FetchProductData() when fetchProductData != null:
-return fetchProductData(_that.keyword,_that.limit,_that.page);case _GetProductDetailById() when getProductDetailById != null:
+return fetchProductData();case _FetchMoreProductData() when fetchMoreProductData != null:
+return fetchMoreProductData();case _GetProductDetailById() when getProductDetailById != null:
 return getProductDetailById(_that.id);case _:
   return orElse();
 
@@ -413,10 +432,11 @@ return getProductDetailById(_that.id);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String keyword,  int limit,  int page)  fetchProductData,required TResult Function( String id)  getProductDetailById,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetchProductData,required TResult Function()  fetchMoreProductData,required TResult Function( String id)  getProductDetailById,}) {final _that = this;
 switch (_that) {
 case _FetchProductData():
-return fetchProductData(_that.keyword,_that.limit,_that.page);case _GetProductDetailById():
+return fetchProductData();case _FetchMoreProductData():
+return fetchMoreProductData();case _GetProductDetailById():
 return getProductDetailById(_that.id);case _:
   throw StateError('Unexpected subclass');
 
@@ -434,10 +454,11 @@ return getProductDetailById(_that.id);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String keyword,  int limit,  int page)?  fetchProductData,TResult? Function( String id)?  getProductDetailById,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetchProductData,TResult? Function()?  fetchMoreProductData,TResult? Function( String id)?  getProductDetailById,}) {final _that = this;
 switch (_that) {
 case _FetchProductData() when fetchProductData != null:
-return fetchProductData(_that.keyword,_that.limit,_that.page);case _GetProductDetailById() when getProductDetailById != null:
+return fetchProductData();case _FetchMoreProductData() when fetchMoreProductData != null:
+return fetchMoreProductData();case _GetProductDetailById() when getProductDetailById != null:
 return getProductDetailById(_that.id);case _:
   return null;
 
@@ -450,71 +471,65 @@ return getProductDetailById(_that.id);case _:
 
 
 class _FetchProductData implements ProductEvent {
-  const _FetchProductData({this.keyword = "", this.limit = 30, this.page = 1});
+  const _FetchProductData();
   
 
-@JsonKey() final  String keyword;
-@JsonKey() final  int limit;
-@JsonKey() final  int page;
 
-/// Create a copy of ProductEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$FetchProductDataCopyWith<_FetchProductData> get copyWith => __$FetchProductDataCopyWithImpl<_FetchProductData>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FetchProductData&&(identical(other.keyword, keyword) || other.keyword == keyword)&&(identical(other.limit, limit) || other.limit == limit)&&(identical(other.page, page) || other.page == page));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FetchProductData);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,keyword,limit,page);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ProductEvent.fetchProductData(keyword: $keyword, limit: $limit, page: $page)';
+  return 'ProductEvent.fetchProductData()';
 }
 
 
 }
+
+
+
 
 /// @nodoc
-abstract mixin class _$FetchProductDataCopyWith<$Res> implements $ProductEventCopyWith<$Res> {
-  factory _$FetchProductDataCopyWith(_FetchProductData value, $Res Function(_FetchProductData) _then) = __$FetchProductDataCopyWithImpl;
-@useResult
-$Res call({
- String keyword, int limit, int page
-});
+
+
+class _FetchMoreProductData implements ProductEvent {
+  const _FetchMoreProductData();
+  
 
 
 
 
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FetchMoreProductData);
 }
-/// @nodoc
-class __$FetchProductDataCopyWithImpl<$Res>
-    implements _$FetchProductDataCopyWith<$Res> {
-  __$FetchProductDataCopyWithImpl(this._self, this._then);
 
-  final _FetchProductData _self;
-  final $Res Function(_FetchProductData) _then;
 
-/// Create a copy of ProductEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? keyword = null,Object? limit = null,Object? page = null,}) {
-  return _then(_FetchProductData(
-keyword: null == keyword ? _self.keyword : keyword // ignore: cast_nullable_to_non_nullable
-as String,limit: null == limit ? _self.limit : limit // ignore: cast_nullable_to_non_nullable
-as int,page: null == page ? _self.page : page // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ProductEvent.fetchMoreProductData()';
 }
 
 
 }
+
+
+
 
 /// @nodoc
 
