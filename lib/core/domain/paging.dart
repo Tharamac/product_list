@@ -15,6 +15,15 @@ class PaginationData {
     required this.currentCount,
   });
 
+  factory PaginationData.empty() {
+    return PaginationData(
+      total: 0,
+      skip: 0,
+      limit: 10,
+      currentCount:0,
+    );
+  }
+
   factory PaginationData.fromJson(Map<String, dynamic> json, {int currentCount = 0}) {
     return PaginationData(
       total: json['total'] ?? 0,
