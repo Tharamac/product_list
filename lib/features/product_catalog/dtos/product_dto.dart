@@ -1,5 +1,5 @@
-
 import 'package:json_annotation/json_annotation.dart';
+import 'package:product_list/features/product_catalog/domain/product.dart';
 
 part 'product_dto.g.dart';
 
@@ -21,13 +21,22 @@ class ProductDto {
     required this.price,
     required this.imageUrl,
     required this.category,
-    this.rating = 0.0, 
+    this.rating = 0.0,
     required this.tags,
   });
 
-
-  factory ProductDto.fromJson(Map<String, dynamic> json) => _$ProductDtoFromJson(json);
+  factory ProductDto.fromJson(Map<String, dynamic> json) =>
+      _$ProductDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductDtoToJson(this);
-}
 
+  Product toDomain() => Product(
+    id: id,
+    name: name,
+    description: description,
+    price: price,
+    imageUrl: imageUrl,
+    category: category,
+    tags: tags,
+  );
+}

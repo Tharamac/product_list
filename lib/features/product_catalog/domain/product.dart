@@ -1,6 +1,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:product_list/repository/product_dto.dart';
+import 'package:product_list/features/product_catalog/dtos/product_dto.dart';
 
 
 class Product {
