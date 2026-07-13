@@ -24,6 +24,20 @@ class PaginationData {
     );
   }
 
+
+PaginationData copyWith({
+int? currentCount,
+    int? skip,
+    int? limit,
+    int? total,
+  }) {
+    return PaginationData(
+      currentCount: currentCount ?? this.currentCount,
+      skip: skip ?? this.skip,
+      limit: limit ?? this.limit,
+      total: total ?? this.total,
+    );
+  }
   factory PaginationData.fromJson(Map<String, dynamic> json, {int currentCount = 0}) {
     return PaginationData(
       total: json['total'] ?? 0,

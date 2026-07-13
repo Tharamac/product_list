@@ -20,6 +20,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           emit(
             state.copyWith(
               failOrFetchSuccess: none(),
+              productListpaging: PaginationData.empty(),
               loadingProductList: true,
             ),
           );
@@ -48,10 +49,15 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           emit(
             state.copyWith(
               loadingProductList: true,
+              productListpaging: state.productListpaging.copyWith(
+                skip: state.productSearchpaging.nextSkip,
+              )
             ),
           );
 
-          final failOrFetchSuccess = await repository.getProductData();
+          final failOrFetchSuccess = await repository.getProductData( 
+            skip: state.productListpaging.nextSkip,
+          );
 
           emit(
             failOrFetchSuccess.fold(
@@ -60,6 +66,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
                 failOrFetchSuccess: some(left(failure)),
               ),
               (productsAndPaging) => state.copyWith(
+                loadingProductList: false,
                 failOrFetchSuccess: some(right(unit)),
                 productList: [
                   ...state.productList,
