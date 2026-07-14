@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_list/features/product_catalog/bloc/product_bloc.dart';
 import 'package:product_list/features/product_catalog/domain/product.dart';
 import 'package:product_list/features/product_catalog/pages/product_detail_page.dart';
+import 'package:product_list/features/product_catalog/pages/search_product_page.dart';
 import 'package:product_list/features/product_catalog/widgets/product_card.dart';
+import 'package:product_list/features/product_catalog/widgets/products_empty_widget.dart';
+import 'package:product_list/features/product_catalog/widgets/products_error_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 /// Decides column count from available width.
@@ -33,7 +36,7 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
-    context.read<ProductBloc>().add(ProductEvent.fetchProductData());
+    refreshProductData();
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
@@ -45,15 +48,27 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
     super.initState();
   }
 
+  void refreshProductData() {
+    context.read<ProductBloc>().add(ProductEvent.fetchProductData());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-
         title: Text("Product Catalog"),
-
-        actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => SearchProductPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -85,59 +100,68 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
             builder: (context, state) {
               return RefreshIndicator.adaptive(
                 onRefresh: () async {
-                  context.read<ProductBloc>().add(
-                    ProductEvent.fetchProductData(),
-                  );
+                  refreshProductData();
                 },
                 child: Skeletonizer(
                   enabled:
                       state.loadingProductList &&
                       state.productListPaging.isFirstPage,
-                  child: 
-                  CustomScrollView(
-                    controller: _scrollController,
-                    slivers: [
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: horizontalPadding,
-                          vertical: 12,
-                        ),
-                        sliver: SliverGrid.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: columns,
-                                mainAxisSpacing: 12,
-                                crossAxisSpacing: 12,
-                                childAspectRatio: aspectRatio,
+                  child: state.failOrFetchSuccess.fold(
+                    (failure) => ProductsErrorWidget(
+                      onPressedRetry: refreshProductData,
+                    ),
+                    (_) => (state.productList.isEmpty)
+                        ? ProductsEmptyWidget(
+                          onPressedRefresh: refreshProductData,
+                        )
+                        : CustomScrollView(
+                            controller: _scrollController,
+                            slivers: [
+                              SliverPadding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: horizontalPadding,
+                                  vertical: 12,
+                                ),
+                                sliver: SliverGrid.builder(
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: columns,
+                                        mainAxisSpacing: 12,
+                                        crossAxisSpacing: 12,
+                                        childAspectRatio: aspectRatio,
+                                      ),
+                                  itemCount: state.productList.length,
+                                  itemBuilder: (context, index) {
+                                    final product = state.productList[index];
+                                    return ProductCard(
+                                      product: product,
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => ProductDetailPage(
+                                              product: product,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
-                          itemCount: state.productList.length,
-                          itemBuilder: (context, index) {
-                            final product = state.productList[index];
-                            return ProductCard(
-                              product: product,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        ProductDetailPage(product: product),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ),
 
-                      // 2. The Loading Widget pinned underneath the grid
-                      if (!state.productListPaging.isFirstPage)
-                        const SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Center(child: CircularProgressIndicator()),
+                              // 2. The Loading Widget pinned underneath the grid
+                              if (!state.productListPaging.isFirstPage)
+                                const SliverToBoxAdapter(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
-                        ),
-                    ],
                   ),
                 ),
               );

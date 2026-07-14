@@ -38,6 +38,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
               ),
               (productsAndPaging) => state.copyWith(
                 loadingProductList: false,
+
                 failOrFetchSuccess: right(unit),
                 productList: productsAndPaging.productList,
                 productListPaging: productsAndPaging.paging,
@@ -104,7 +105,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
                 loadingProductList: false,
                 failOrSearchSuccess: right(unit),
                 searchProductResult: [
-                  ...state.productList,
+                  ...state.searchProductResult,
                   ...productsAndPaging.productList,
                 ],
                 productSearchPaging: productsAndPaging.paging,
@@ -134,10 +135,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
               (productsAndPaging) => state.copyWith(
                 loadingProductList: false,
                 failOrSearchSuccess: right(unit),
-                searchProductResult: [
-                  ...state.productList,
-                  ...productsAndPaging.productList,
-                ],
+                searchProductResult: productsAndPaging.productList,
                 productSearchPaging: productsAndPaging.paging,
               ),
             ),

@@ -10,6 +10,7 @@ class ProductEvent with _$ProductEvent {
       _OnSearchMoreProduct;
   const factory ProductEvent.onSearchProduct(String keyword, ) =
       _OnSearchProduct;
+
   const factory ProductEvent.onTypeSearchProduct(
     String keyword,
     bool isFirstPage,

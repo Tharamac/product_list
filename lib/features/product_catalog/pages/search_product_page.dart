@@ -5,6 +5,9 @@ import 'package:product_list/features/product_catalog/bloc/product_bloc.dart';
 import 'package:product_list/features/product_catalog/domain/product.dart';
 import 'package:product_list/features/product_catalog/pages/product_detail_page.dart';
 import 'package:product_list/features/product_catalog/widgets/product_card.dart';
+import 'package:product_list/features/product_catalog/widgets/products_empty_widget.dart';
+import 'package:product_list/features/product_catalog/widgets/products_error_widget.dart';
+import 'package:product_list/features/product_catalog/widgets/products_no_result_found_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 /// Decides column count from available width.
@@ -56,7 +59,7 @@ class _SearchProductPageState extends State<SearchProductPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
 
-        title:  TextField(
+        title: TextField(
               controller: _searchController,
               onChanged: _onSearchChanged,
               textInputAction: TextInputAction.search,
@@ -64,20 +67,12 @@ class _SearchProductPageState extends State<SearchProductPage> {
                 hintText: 'Search products...',
                 border: InputBorder.none,
                 hintStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.7)
+                  color: Theme.of(context).colorScheme.onPrimaryContainer
                 ),
-                suffixIcon: _searchController.text.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          _onSearchChanged();
-                          setState(() {}); // refresh suffix icon
-                        },
-                      )
-                    : null,
+                alignLabelWithHint: true,
               ),
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              maxLines: 1,
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
               onSubmitted: (_) => FocusScope.of(context).unfocus(),
             ),
 
@@ -107,7 +102,15 @@ class _SearchProductPageState extends State<SearchProductPage> {
                   enabled:
                       state.loadingProductList &&
                       state.productSearchPaging.isFirstPage,
-                  child: CustomScrollView(
+                  child: state.failOrSearchSuccess.fold(
+                    (failure) => ProductsErrorWidget(
+                      onPressedRetry: (){
+                        _onSearchChanged(_searchController.text);
+                      }
+                    ),
+                    (_) => (state.searchProductResult.isEmpty)
+                        ? ProductsNoResultFoundWidget()
+                        : CustomScrollView(
                     controller: _scrollController,
                     slivers: [
                       SliverPadding(
@@ -123,9 +126,9 @@ class _SearchProductPageState extends State<SearchProductPage> {
                                 crossAxisSpacing: 12,
                                 childAspectRatio: aspectRatio,
                               ),
-                          itemCount: state.productList.length,
+                          itemCount: state.searchProductResult.length,
                           itemBuilder: (context, index) {
-                            final product = state.productList[index];
+                            final product = state.searchProductResult[index];
                             return ProductCard(
                               product: product,
                               onTap: () {
@@ -143,17 +146,31 @@ class _SearchProductPageState extends State<SearchProductPage> {
                       ),
 
                       // 2. The Loading Widget pinned underneath the grid
-                      if (!state.productSearchPaging.isFirstPage)
+                      if (!state.productSearchPaging.isFirstPage && !state.productSearchPaging.isLastPage)
                         const SliverToBoxAdapter(
                           child: Padding(
                             padding: EdgeInsets.all(16.0),
                             child: Center(child: CircularProgressIndicator()),
                           ),
                         ),
+
+                      if(state.productSearchPaging.isLastPage)
+                                SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Divider(
+           
+                  thickness: 1,
+                  color: Colors.grey.shade300,
+                ),
+              ),
+            ),
+
+                      
                     ],
                   ),
               
-              );
+              ));
             },
           );
         },
