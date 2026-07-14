@@ -22,28 +22,33 @@ double _gridAspectRatio(double width) {
   return 0.68;
 }
 
-class ProductCatalogPage extends StatefulWidget {
-  const ProductCatalogPage({super.key});
+class SearchProductPage extends StatefulWidget {
+  const SearchProductPage({super.key});
 
   @override
-  State<ProductCatalogPage> createState() => _ProductCatalogPageState();
+  State<SearchProductPage> createState() => _SearchProductPageState();
 }
 
-class _ProductCatalogPageState extends State<ProductCatalogPage> {
+class _SearchProductPageState extends State<SearchProductPage> {
   final ScrollController _scrollController = ScrollController();
+    final _searchController = TextEditingController();
   @override
   void initState() {
-    context.read<ProductBloc>().add(ProductEvent.fetchProductData());
+  
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent) {
-        context.read<ProductBloc>().add(ProductEvent.fetchMoreProductData());
+        context.read<ProductBloc>().add(ProductEvent.onSearchMoreProduct(_searchController.text));
       }
     });
-
     super.initState();
   }
+
+  void _onSearchChanged([String keyword = ""]) {
+    context.read<ProductBloc>().add(ProductEvent.onSearchProduct(keyword));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,30 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
 
-        title: Text("Product Catalog"),
+        title:  TextField(
+              controller: _searchController,
+              onChanged: _onSearchChanged,
+              textInputAction: TextInputAction.search,
+              decoration: InputDecoration(
+                hintText: 'Search products...',
+                border: InputBorder.none,
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.7)
+                ),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          _onSearchChanged();
+                          setState(() {}); // refresh suffix icon
+                        },
+                      )
+                    : null,
+              ),
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              onSubmitted: (_) => FocusScope.of(context).unfocus(),
+            ),
 
         actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
       ),
@@ -68,33 +96,18 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
               : 12.0;
 
           return BlocBuilder<ProductBloc, ProductState>(
-            buildWhen: (previous, current) {
-              return !DeepCollectionEquality().equals(
-                    previous.failOrFetchSuccess,
-                    current.failOrFetchSuccess,
-                  ) ||
-                  !DeepCollectionEquality().equals(
-                    previous.productList,
-                    current.productList,
-                  ) ||
-                  !DeepCollectionEquality().equals(
-                    previous.productListPaging,
-                    current.productListPaging,
-                  );
+                buildWhen: (previous, current) {
+              return 
+              !DeepCollectionEquality().equals(previous.failOrSearchSuccess, current.failOrSearchSuccess,)  
+               ||  !DeepCollectionEquality().equals(previous.searchProductResult, current.searchProductResult,) ||
+               !DeepCollectionEquality().equals(previous.productSearchPaging, current.productSearchPaging,);
             },
             builder: (context, state) {
-              return RefreshIndicator.adaptive(
-                onRefresh: () async {
-                  context.read<ProductBloc>().add(
-                    ProductEvent.fetchProductData(),
-                  );
-                },
-                child: Skeletonizer(
+              return Skeletonizer(
                   enabled:
                       state.loadingProductList &&
-                      state.productListPaging.isFirstPage,
-                  child: 
-                  CustomScrollView(
+                      state.productSearchPaging.isFirstPage,
+                  child: CustomScrollView(
                     controller: _scrollController,
                     slivers: [
                       SliverPadding(
@@ -130,7 +143,7 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
                       ),
 
                       // 2. The Loading Widget pinned underneath the grid
-                      if (!state.productListPaging.isFirstPage)
+                      if (!state.productSearchPaging.isFirstPage)
                         const SliverToBoxAdapter(
                           child: Padding(
                             padding: EdgeInsets.all(16.0),
@@ -139,7 +152,7 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
                         ),
                     ],
                   ),
-                ),
+              
               );
             },
           );

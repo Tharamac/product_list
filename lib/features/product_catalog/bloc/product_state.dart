@@ -4,20 +4,22 @@ part of 'product_bloc.dart';
 abstract class ProductState with _$ProductState {
   const factory ProductState({
     required bool loadingProductList,
-    required Option<Either<ProductFailure, Unit>> failOrFetchSuccess,
+    required Either<ProductFailure, Unit> failOrFetchSuccess,
     required List<Product> productList,
-    required PaginationData productListpaging,
+    required PaginationData productListPaging,
 
+    required Either<ProductFailure, Unit> failOrSearchSuccess,
     required List<Product> searchProductResult,
-    required PaginationData productSearchpaging,
+    required PaginationData productSearchPaging,
   }) = _ProductState;
 
   factory ProductState.initial() => ProductState(
-    failOrFetchSuccess: none(),
+    failOrFetchSuccess: right(unit),
     productList: [],
     loadingProductList: false,
-    productListpaging: PaginationData.empty(),
+    productListPaging: PaginationData.empty(),
+    failOrSearchSuccess: right(unit),
     searchProductResult: [],
-    productSearchpaging: PaginationData.empty(),
+    productSearchPaging: PaginationData.empty(),
   );
 }

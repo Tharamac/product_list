@@ -79,9 +79,16 @@ class _ProductApi implements ProductApi {
   @override
   Future<HttpResponse<dynamic>> searchProductKeyword({
     required String keyword,
+    int? skip,
+    int limit = 10,
   }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'q': keyword};
+    final queryParameters = <String, dynamic>{
+      r'q': keyword,
+      r'skip': skip,
+      r'limit': limit,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<dynamic>>(

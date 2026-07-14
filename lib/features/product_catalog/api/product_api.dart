@@ -32,6 +32,8 @@ abstract class ProductApi {
   @GET('/products/search')
   Future<HttpResponse<dynamic>> searchProductKeyword({
     @Query("q") required String keyword,
+    @Query("skip") int? skip,
+    @Query("limit") int limit = 10,
   });
 
 
