@@ -57,7 +57,11 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Product Catalog"),
+        title: Text(
+          "Product Catalog",
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -107,13 +111,12 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
                       state.loadingProductList &&
                       state.productListPaging.isFirstPage,
                   child: state.failOrFetchSuccess.fold(
-                    (failure) => ProductsErrorWidget(
-                      onPressedRetry: refreshProductData,
-                    ),
+                    (failure) =>
+                        ProductsErrorWidget(onPressedRetry: refreshProductData),
                     (_) => (state.productList.isEmpty)
                         ? ProductsEmptyWidget(
-                          onPressedRefresh: refreshProductData,
-                        )
+                            onPressedRefresh: refreshProductData,
+                          )
                         : CustomScrollView(
                             controller: _scrollController,
                             slivers: [
@@ -150,13 +153,26 @@ class _ProductCatalogPageState extends State<ProductCatalogPage> {
                                 ),
                               ),
 
-                              // 2. The Loading Widget pinned underneath the grid
-                              if (!state.productListPaging.isFirstPage)
+                              if (!state.productListPaging.isLastPage)
                                 const SliverToBoxAdapter(
                                   child: Padding(
                                     padding: EdgeInsets.all(16.0),
                                     child: Center(
                                       child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                                ),
+
+                              if (state.productListPaging.isLastPage)
+                                SliverToBoxAdapter(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 16,
+                                    ),
+                                    child: Divider(
+                                      thickness: 1,
+                                      color: Colors.grey.shade300,
                                     ),
                                   ),
                                 ),

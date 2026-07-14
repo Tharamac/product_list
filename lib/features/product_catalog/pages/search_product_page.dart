@@ -34,15 +34,15 @@ class SearchProductPage extends StatefulWidget {
 
 class _SearchProductPageState extends State<SearchProductPage> {
   final ScrollController _scrollController = ScrollController();
-    final _searchController = TextEditingController();
+  final _searchController = TextEditingController();
   @override
   void initState() {
-  
-
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent) {
-        context.read<ProductBloc>().add(ProductEvent.onSearchMoreProduct(_searchController.text));
+        context.read<ProductBloc>().add(
+          ProductEvent.onSearchMoreProduct(_searchController.text),
+        );
       }
     });
     super.initState();
@@ -52,29 +52,29 @@ class _SearchProductPageState extends State<SearchProductPage> {
     context.read<ProductBloc>().add(ProductEvent.onSearchProduct(keyword));
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-
         title: TextField(
-              controller: _searchController,
-              onChanged: _onSearchChanged,
-              textInputAction: TextInputAction.search,
-              decoration: InputDecoration(
-                hintText: 'Search products...',
-                border: InputBorder.none,
-                hintStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer
-                ),
-                alignLabelWithHint: true,
-              ),
-              maxLines: 1,
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
-              onSubmitted: (_) => FocusScope.of(context).unfocus(),
+          controller: _searchController,
+          onChanged: _onSearchChanged,
+          textInputAction: TextInputAction.search,
+          decoration: InputDecoration(
+            hintText: 'Search products...',
+            border: InputBorder.none,
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
+            alignLabelWithHint: true,
+          ),
+          maxLines: 1,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
+          ),
+          onSubmitted: (_) => FocusScope.of(context).unfocus(),
+        ),
 
         actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
       ),
@@ -91,86 +91,98 @@ class _SearchProductPageState extends State<SearchProductPage> {
               : 12.0;
 
           return BlocBuilder<ProductBloc, ProductState>(
-                buildWhen: (previous, current) {
-              return 
-              !DeepCollectionEquality().equals(previous.failOrSearchSuccess, current.failOrSearchSuccess,)  
-               ||  !DeepCollectionEquality().equals(previous.searchProductResult, current.searchProductResult,) ||
-               !DeepCollectionEquality().equals(previous.productSearchPaging, current.productSearchPaging,);
+            buildWhen: (previous, current) {
+              return !DeepCollectionEquality().equals(
+                    previous.failOrSearchSuccess,
+                    current.failOrSearchSuccess,
+                  ) ||
+                  !DeepCollectionEquality().equals(
+                    previous.searchProductResult,
+                    current.searchProductResult,
+                  ) ||
+                  !DeepCollectionEquality().equals(
+                    previous.productSearchPaging,
+                    current.productSearchPaging,
+                  );
             },
             builder: (context, state) {
               return Skeletonizer(
-                  enabled:
-                      state.loadingProductList &&
-                      state.productSearchPaging.isFirstPage,
-                  child: state.failOrSearchSuccess.fold(
-                    (failure) => ProductsErrorWidget(
-                      onPressedRetry: (){
-                        _onSearchChanged(_searchController.text);
-                      }
-                    ),
-                    (_) => (state.searchProductResult.isEmpty)
-                        ? ProductsNoResultFoundWidget()
-                        : CustomScrollView(
-                    controller: _scrollController,
-                    slivers: [
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: horizontalPadding,
-                          vertical: 12,
-                        ),
-                        sliver: SliverGrid.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: columns,
-                                mainAxisSpacing: 12,
-                                crossAxisSpacing: 12,
-                                childAspectRatio: aspectRatio,
-                              ),
-                          itemCount: state.searchProductResult.length,
-                          itemBuilder: (context, index) {
-                            final product = state.searchProductResult[index];
-                            return ProductCard(
-                              product: product,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        ProductDetailPage(product: product),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ),
-
-                      // 2. The Loading Widget pinned underneath the grid
-                      if (!state.productSearchPaging.isFirstPage && !state.productSearchPaging.isLastPage)
-                        const SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Center(child: CircularProgressIndicator()),
-                          ),
-                        ),
-
-                      if(state.productSearchPaging.isLastPage)
-                                SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Divider(
-           
-                  thickness: 1,
-                  color: Colors.grey.shade300,
-                ),
-              ),
-            ),
-
-                      
-                    ],
+                enabled:
+                    state.loadingProductList &&
+                    state.productSearchPaging.isFirstPage,
+                child: state.failOrSearchSuccess.fold(
+                  (failure) => ProductsErrorWidget(
+                    onPressedRetry: () {
+                      _onSearchChanged(_searchController.text);
+                    },
                   ),
-              
-              ));
+                  (_) => (state.searchProductResult.isEmpty)
+                      ? ProductsNoResultFoundWidget()
+                      : CustomScrollView(
+                          controller: _scrollController,
+                          slivers: [
+                            SliverPadding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: horizontalPadding,
+                                vertical: 12,
+                              ),
+                              sliver: SliverGrid.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: columns,
+                                      mainAxisSpacing: 12,
+                                      crossAxisSpacing: 12,
+                                      childAspectRatio: aspectRatio,
+                                    ),
+                                itemCount: state.searchProductResult.length,
+                                itemBuilder: (context, index) {
+                                  final product =
+                                      state.searchProductResult[index];
+                                  return ProductCard(
+                                    product: product,
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => ProductDetailPage(
+                                            product: product,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+
+                            // 2. The Loading Widget pinned underneath the grid
+                            if (!state.productSearchPaging.isLastPage)
+                              const SliverToBoxAdapter(
+                                child: Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ),
+                              ),
+
+                            if (state.productSearchPaging.isLastPage)
+                              SliverToBoxAdapter(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 16,
+                                  ),
+                                  child: Divider(
+                                    thickness: 1,
+                                    color: Colors.grey.shade300,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                ),
+              );
             },
           );
         },
