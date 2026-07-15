@@ -23,7 +23,7 @@ class ProductCard extends StatelessWidget {
               child: Hero(
                 tag: 'product-image-${product.id}',
                 child: Image(
-                  image: CachedNetworkImageProvider(product.imageUrl),
+                  image: CachedNetworkImageProvider(product.thumbnailUrl),
                     fit: BoxFit.cover,
                   width: double.infinity,
                   loadingBuilder: (context, child, progress) {
@@ -33,7 +33,6 @@ class ProductCard extends StatelessWidget {
                   errorBuilder: (_, _, _) =>
                       const Icon(Icons.broken_image, size: 40),
                   ),
-              
               ),
             ),
             Container(
@@ -41,7 +40,6 @@ class ProductCard extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
               child: Column(
                 crossAxisAlignment: .stretch,
-
                 children: [
                   Text(
                     product.title,

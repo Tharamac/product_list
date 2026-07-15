@@ -13,8 +13,19 @@ ProductDto _$ProductDtoFromJson(Map<String, dynamic> json) => ProductDto(
   price: (json['price'] as num).toDouble(),
   thumbnailUrl: json['thumbnail'] as String,
   category: json['category'] as String,
-  rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+  rating: toDouble((json['rating'] as num).toDouble()),
   tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
+  brand: json['brand'] as String?,
+  sku: json['sku'] as String,
+  imageUrls: (json['images'] as List<dynamic>).map((e) => e as String).toList(),
+  reviews: (json['reviews'] as List<dynamic>)
+      .map((e) => e as Map<String, dynamic>)
+      .toList(),
+  discountPercentage: (json['discountPercentage'] as num).toDouble(),
+  stock: (json['stock'] as num).toInt(),
+  availabilityStatus: json['availabilityStatus'] as String,
+  warrantyInformation: json['warrantyInformation'] as String,
+  shippingInformation: json['shippingInformation'] as String,
 );
 
 Map<String, dynamic> _$ProductDtoToJson(ProductDto instance) =>
@@ -27,4 +38,13 @@ Map<String, dynamic> _$ProductDtoToJson(ProductDto instance) =>
       'category': instance.category,
       'rating': instance.rating,
       'tags': instance.tags,
+      'brand': instance.brand,
+      'sku': instance.sku,
+      'images': instance.imageUrls,
+      'reviews': instance.reviews,
+      'discountPercentage': instance.discountPercentage,
+      'stock': instance.stock,
+      'availabilityStatus': instance.availabilityStatus,
+      'warrantyInformation': instance.warrantyInformation,
+      'shippingInformation': instance.shippingInformation,
     };

@@ -1,11 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:product_list/features/product_catalog/domain/product.dart';
+import 'package:product_list/features/product_catalog/domain/review.dart';
 
 part 'product_dto.g.dart';
 
+double toDouble(double number) {
+  return number;
+}
+
 @JsonSerializable()
 class ProductDto {
-  
   final int id;
   final String title;
   final String description;
@@ -15,6 +19,16 @@ class ProductDto {
   final String category;
   final double rating;
   final List<String> tags;
+  final String? brand;
+  final String sku;
+  @JsonKey(name: "images")
+  final List<String> imageUrls;
+  final List<Map<String, dynamic>> reviews;
+  final double discountPercentage;
+  final int stock;
+  final String availabilityStatus;
+  final String warrantyInformation;
+  final String shippingInformation;
 
   const ProductDto({
     required this.id,
@@ -23,8 +37,18 @@ class ProductDto {
     required this.price,
     required this.thumbnailUrl,
     required this.category,
-    this.rating = 0.0,
+    
+    required this.rating,
     required this.tags,
+    this.brand,
+    required this.sku,
+    required this.imageUrls,
+    required this.reviews,
+    required this.discountPercentage,
+    required this.stock,
+    required this.availabilityStatus,
+    required this.warrantyInformation,
+    required this.shippingInformation,
   });
 
   factory ProductDto.fromJson(Map<String, dynamic> json) =>
@@ -32,14 +56,5 @@ class ProductDto {
 
   Map<String, dynamic> toJson() => _$ProductDtoToJson(this);
 
-  Product toDomain() => Product(
-    id: id.toString(),
-    title: title,
-    description: description,
-    price: price,
-    rating: rating,
-    imageUrl: thumbnailUrl,
-    category: category,
-    tags: tags,
-  );
+  Product toDomain() => Product.fromDTO(this);
 }
