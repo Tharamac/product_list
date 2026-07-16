@@ -4,6 +4,8 @@ import 'package:product_list/features/product_catalog/domain/review.dart';
 
 part 'product_dto.g.dart';
 
+typedef Dimension = ({double width, double height, double depth});
+
 double toDouble(double number) {
   return number;
 }
@@ -29,6 +31,9 @@ class ProductDto {
   final String availabilityStatus;
   final String warrantyInformation;
   final String shippingInformation;
+  final String returnPolicy;
+  final double weight;
+  final Dimension dimensions;
 
   const ProductDto({
     required this.id,
@@ -37,7 +42,6 @@ class ProductDto {
     required this.price,
     required this.thumbnailUrl,
     required this.category,
-    
     required this.rating,
     required this.tags,
     this.brand,
@@ -49,6 +53,9 @@ class ProductDto {
     required this.availabilityStatus,
     required this.warrantyInformation,
     required this.shippingInformation,
+    required this.returnPolicy,
+    required this.weight,
+    required this.dimensions,
   });
 
   factory ProductDto.fromJson(Map<String, dynamic> json) =>

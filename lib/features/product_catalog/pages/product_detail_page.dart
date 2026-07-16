@@ -230,6 +230,12 @@ class ProductDetailPage extends StatelessWidget {
           ),
         ),
 
+   
+
+        ListTile(
+          leading: Icon(Icons.local_shipping_outlined),
+          title: Text(product.shippingInformation),
+        ),
         const Divider(height: 32),
         ReviewSection(reviews: product.reviews),
         const SizedBox(height: 100),
@@ -260,7 +266,7 @@ class ProductDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title:   Text(
+        title: Text(
           product.title,
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -271,31 +277,33 @@ class ProductDetailPage extends StatelessWidget {
           // Fixed image panel (left)
           SizedBox(
             width: constraints.maxWidth * 0.4,
-          child:
-          Column(children: [_buildImage(), Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: _productHeader(context),
-          )]),
-
+            child: Column(
+              children: [
+                _buildImage(),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _productHeader(context),
+                ),
+              ],
+            ),
           ),
           // Scrollable details panel (right)
           Expanded(
             flex: 1,
-            child:
-          Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(32),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 700),
-                    child: _productBody(context),
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(32),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 700),
+                      child: _productBody(context),
+                    ),
                   ),
                 ),
-              ),
-              // _AddToCartBar(product: product, inline: true),
-            ],
-          ),
+                // _AddToCartBar(product: product, inline: true),
+              ],
+            ),
           ),
         ],
       ),

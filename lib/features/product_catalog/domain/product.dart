@@ -22,6 +22,10 @@ class Product {
   final String availabilityStatus;
   final String warrantyInformation;
   final String shippingInformation;
+  final String returnPolicy;
+  final double weight;
+  final Dimension dimension;
+  
 
   const Product({
     required this.id,
@@ -32,7 +36,7 @@ class Product {
     required this.category,
     required this.rating,
     required this.tags,
-    this.brand,
+    required this.brand,
     required this.sku,
     required this.imageUrls,
     required this.reviews,
@@ -40,7 +44,11 @@ class Product {
     required this.stock,
     required this.availabilityStatus,
     required this.warrantyInformation,
-    required this.shippingInformation,
+    required this.shippingInformation, 
+    required this.returnPolicy, 
+    required this.weight, 
+    required this.dimension,
+    
   });
 
   factory Product.fromDTO(ProductDto dto) {
@@ -51,6 +59,7 @@ class Product {
       price: dto.price,
       thumbnailUrl: dto.thumbnailUrl,
       category: dto.category,
+      brand: dto.brand,
       tags: dto.tags,
       sku: dto.sku,
       rating: dto.rating,
@@ -63,6 +72,9 @@ class Product {
       availabilityStatus: dto.availabilityStatus, 
       warrantyInformation: dto.warrantyInformation, 
       shippingInformation: dto.shippingInformation,
+      dimension: dto.dimensions,
+      weight: dto.weight,
+      returnPolicy: dto.returnPolicy
     );
   }
 }
